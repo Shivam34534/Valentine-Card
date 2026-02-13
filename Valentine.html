@@ -77,17 +77,7 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* QR Modal Styles */
-        #qr-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            align-items: center;
-            justify-content: center;
-            z-index: 50;
-        }
+
     </style>
 </head>
 <body>
@@ -103,12 +93,6 @@
         <div class="character-container">
             <img id="main-character" src="https://media.tenor.com/tE9_Mv9jJmAAAAAC/bugcat-capoo-blue-cat.gif" alt="Bugcat Capoo" class="character-img">
         </div>
-
-        <!-- Share Button -->
-        <button onclick="toggleQR()" class="mt-8 text-[#bd2e2e] opacity-60 hover:opacity-100 flex items-center justify-center gap-2 w-full text-sm font-bold uppercase tracking-widest">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
-            Share App (QR Code)
-        </button>
     </div>
 
     <!-- Success Screen -->
@@ -117,20 +101,7 @@
         <img src="https://media.tenor.com/f1V_5qVAnAsAAAAj/bugcat-capoo-animated.gif" alt="Celebration Hug" class="character-img mt-8">
     </div>
 
-    <!-- QR Modal -->
-    <div id="qr-modal" onclick="toggleQR()">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-xs w-full mx-4" onclick="event.stopPropagation()">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Share with your Valentine</h2>
-            <div id="qr-container" class="bg-gray-100 p-4 rounded-xl mb-4 flex items-center justify-center min-h-[200px]">
-                <img id="qr-image" src="" alt="QR Code" class="hidden">
-                <p id="qr-placeholder" class="text-gray-400 text-sm">Generating...</p>
-            </div>
-            <p class="text-xs text-gray-500 mb-4">Host this file and paste the URL below to update the QR code:</p>
-            <input type="text" id="url-input" placeholder="Paste your hosted URL here" 
-                   class="w-full p-2 border border-gray-200 rounded-lg text-sm mb-4 outline-none focus:ring-2 focus:ring-pink-300">
-            <button onclick="toggleQR()" class="w-full bg-gray-100 text-gray-600 font-bold py-2 rounded-lg hover:bg-gray-200 transition-colors">Close</button>
-        </div>
-    </div>
+
 
     <script>
         const messages = [
@@ -166,36 +137,7 @@
             document.getElementById('success-screen').classList.add("fade-in");
         }
 
-        // QR Logic
-        function toggleQR() {
-            const modal = document.getElementById('qr-modal');
-            const isOpening = modal.style.display !== 'flex';
-            modal.style.display = isOpening ? 'flex' : 'none';
 
-            if (isOpening) {
-                generateQR();
-            }
-        }
-
-            const urlInput = document.getElementById('url-input');
-            const qrImage = document.getElementById('qr-image');
-            const placeholder = document.getElementById('qr-placeholder');
-            
-            // Default to current URL if input is empty
-            const shareUrl = urlInput.value || window.location.href;
-            
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(shareUrl)}`;
-            
-            qrImage.src = qrUrl;
-            qrImage.onload = () => {
-                qrImage.classList.remove('hidden');
-                p
-        function generateQR() {laceholder.classList.add('hidden');
-            };
-        }
-
-        // Update QR as you type
-        document.getElementById('url-input').addEventListener('input', generateQR);
     </script>
 </body>
 </html>
