@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #fce1e4;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header-text {
+            color: #bd2e2e;
+            font-weight: bold;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .yes-button {
+            background-color: #4caf50;
+        }
+
+        .no-button {
+            background-color: #f44336;
+        }
+
+        .character-img {
+            max-width: 280px;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .celebration {
+            display: none;
+            text-align: center;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* QR Modal Styles */
+        #qr-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container" class="container">
+        <h1 class="header-text">Will you be my Valentine?</h1>
+
+        <div class="buttons">
+            <button id="yesBtn" class="btn yes-button" onclick="handleYesClick()">Yes</button>
+            <button id="noBtn" class="btn no-button" onclick="handleNoClick()">No</button>
+        </div>
+
+        <div class="character-container">
+            <img id="main-character" src="https://media.tenor.com/tE9_Mv9jJmAAAAAC/bugcat-capoo-blue-cat.gif" alt="Bugcat Capoo" class="character-img">
+        </div>
+
+        <!-- Share Button -->
+        <button onclick="toggleQR()" class="mt-8 text-[#bd2e2e] opacity-60 hover:opacity-100 flex items-center justify-center gap-2 w-full text-sm font-bold uppercase tracking-widest">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
+            Share App (QR Code)
+        </button>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="success-screen" class="container celebration">
+        <h1 class="header-text text-5xl">Knew you would say yes! ❤️</h1>
+        <img src="https://media.tenor.com/f1V_5qVAnAsAAAAj/bugcat-capoo-animated.gif" alt="Celebration Hug" class="character-img mt-8">
+    </div>
+
+    <!-- QR Modal -->
+    <div id="qr-modal" onclick="toggleQR()">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-xs w-full mx-4" onclick="event.stopPropagation()">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Share with your Valentine</h2>
+            <div id="qr-container" class="bg-gray-100 p-4 rounded-xl mb-4 flex items-center justify-center min-h-[200px]">
+                <img id="qr-image" src="" alt="QR Code" class="hidden">
+                <p id="qr-placeholder" class="text-gray-400 text-sm">Generating...</p>
+            </div>
+            <p class="text-xs text-gray-500 mb-4">Host this file and paste the URL below to update the QR code:</p>
+            <input type="text" id="url-input" placeholder="Paste your hosted URL here" 
+                   class="w-full p-2 border border-gray-200 rounded-lg text-sm mb-4 outline-none focus:ring-2 focus:ring-pink-300">
+            <button onclick="toggleQR()" class="w-full bg-gray-100 text-gray-600 font-bold py-2 rounded-lg hover:bg-gray-200 transition-colors">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "No", "Are you sure?", "Really sure??", "Think again!", "Last chance!", 
+            "Surely not?", "You might regret this!", "Give it another thought!", 
+            "Are you absolutely sure?", "This could be a mistake!", "Have a heart!", 
+            "Don't be so cold!", "Change of mind?", "Is that your final answer?", 
+            "You're breaking my heart ;("
+        ];
+
+        let messageIndex = 0;
+
+        function handleNoClick() {
+            const noButton = document.getElementById("noBtn");
+            const yesButton = document.getElementById("yesBtn");
+
+            noButton.textContent = messages[messageIndex];
+            if (messageIndex < messages.length - 1) {
+                messageIndex++;
+            }
+
+            const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+            yesButton.style.fontSize = `${currentSize * 1.5}px`;
+            
+            const currentPaddingY = parseFloat(window.getComputedStyle(yesButton).paddingTop);
+            const currentPaddingX = parseFloat(window.getComputedStyle(yesButton).paddingLeft);
+            yesButton.style.padding = `${currentPaddingY * 1.2}px ${currentPaddingX * 1.2}px`;
+        }
+
+        function handleYesClick() {
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'block';
+            document.getElementById('success-screen').classList.add("fade-in");
+        }
+
+        // QR Logic
+        function toggleQR() {
+            const modal = document.getElementById('qr-modal');
+            const isOpening = modal.style.display !== 'flex';
+            modal.style.display = isOpening ? 'flex' : 'none';
+
+            if (isOpening) {
+                generateQR();
+            }
+        }
+
+        function generateQR() {
+            const urlInput = document.getElementById('url-input');
+            const qrImage = document.getElementById('qr-image');
+            const placeholder = document.getElementById('qr-placeholder');
+            
+            // Default to current URL if input is empty
+            const shareUrl = urlInput.value || window.location.href;
+            
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(shareUrl)}`;
+            
+            qrImage.src = qrUrl;
+            qrImage.onload = () => {
+                qrImage.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            };
+        }
+
+        // Update QR as you type
+        document.getElementById('url-input').addEventListener('input', generateQR);
+    </script>
+</body>
+</html>
