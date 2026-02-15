@@ -77,6 +77,24 @@
             to { opacity: 1; transform: scale(1); }
         }
 
+        .sticker {
+            position: fixed;
+            font-size: 3rem;
+            opacity: 0.8;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        .sticker1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .sticker2 { top: 20%; right: 8%; animation-delay: 1s; }
+        .sticker3 { bottom: 20%; left: 10%; animation-delay: 2s; }
+        .sticker4 { bottom: 15%; right: 10%; animation-delay: 1.5s; }
+
 
     </style>
 </head>
@@ -97,8 +115,13 @@
 
     <!-- Success Screen -->
     <div id="success-screen" class="container celebration">
-        <h1 class="header-text text-5xl">I knew you would say yes!❤️</h1>
+        <div class="sticker sticker1">💕</div>
+        <div class="sticker sticker2">💖</div>
+        <div class="sticker sticker3">✨</div>
+        <div class="sticker sticker4">💝</div>
+        <h1 class="header-text text-5xl">I knew you would say yes! </h1>
         <img src="https://media.tenor.com/f1V_5qVAnAsAAAAj/bugcat-capoo-animated.gif" alt="Celebration Hug" class="character-img mt-8">
+        
     </div>
 
 
